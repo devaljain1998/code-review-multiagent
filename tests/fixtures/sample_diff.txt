@@ -1,0 +1,51 @@
+diff --git a/api/handlers.py b/api/handlers.py
+new file mode 100644
+index 0000000..abc1234
+--- /dev/null
++++ b/api/handlers.py
+@@ -0,0 +1,45 @@
++"""API handlers for user management."""
++
++import sqlite3
++from flask import request, jsonify
++
++
++def get_user(user_id):
++    """Get a user by ID."""
++    conn = sqlite3.connect('users.db')
++    cursor = conn.cursor()
++
++    # VULNERABILITY: SQL injection
++    query = f"SELECT * FROM users WHERE id = {user_id}"
++    cursor.execute(query)
++
++    user = cursor.fetchone()
++    conn.close()
++
++    return jsonify(user)
++
++
++def create_user():
++    """Create a new user."""
++    data = request.json
++
++    # BUG: No validation of required fields
++    name = data['name']
++    email = data['email']
++
++    conn = sqlite3.connect('users.db')
++    cursor = conn.cursor()
++
++    # STYLE: Should use parameterized query
++    cursor.execute(
++        f"INSERT INTO users (name, email) VALUES ('{name}', '{email}')"
++    )
++
++    conn.commit()
++    # BUG: Connection not closed in all paths
++
++    return jsonify({'status': 'created'})
++
++
++# STYLE: Hardcoded secret
++API_KEY = "sk-1234567890abcdef"

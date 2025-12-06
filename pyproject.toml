@@ -1,0 +1,41 @@
+[project]
+name = "code-reviewer"
+version = "0.1.0"
+description = "Multi-agent code review system powered by Claude"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.35.0",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "gitpython>=3.1.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.1.0",
+]
+agent-sdk = [
+    # Future: claude-agent SDK when available
+]
+
+[project.scripts]
+code-review = "code_reviewer.cli:review"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
