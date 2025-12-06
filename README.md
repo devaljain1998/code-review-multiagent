@@ -746,7 +746,6 @@ Database connection is not closed in the error path.
 
 **Suggested Fix**:
 > Use a context manager: `with sqlite3.connect('users.db') as conn:`
-```
 
 ---
 
